@@ -157,6 +157,7 @@ exports.verifyMedicalCertificate = async (req, res) => {
       const pdfData = await fs.readFile(uploadedFilePath);
       const pdfText = await pdf(pdfData);
       text = pdfText.text;
+      console.log("Extrected text : ", text);
     } else if ([".png", ".jpg", ".jpeg"].includes(fileExtension)) {
       // const certImage = cv.imread(uploadedFilePath);
       // if (certImage.empty)
@@ -196,7 +197,7 @@ exports.verifyMedicalCertificate = async (req, res) => {
      const binaryImage = denoisedImage.threshold(
         0,
         255,
-        cv.THRESH_BINARY | cv.THRESH_OTSU
+        cv.THRESH_BINARY | cv.THRESH_OTSU 
       );
       // console.log("Binary Image : ", binaryImage);
 
@@ -209,7 +210,7 @@ exports.verifyMedicalCertificate = async (req, res) => {
       console.log(`Preprocessed image saved at: ${preprocessedImagePath}`); 
 
       try {
-        const {
+        const { 
           data: { text: imageText },
         } = await Tesseract.recognize(preprocessedImagePath, "eng", {
           logger: (info) => console.log(info), // Log progress
